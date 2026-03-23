@@ -21,7 +21,7 @@ public class TaxCalTest {
         });
     }
 
-    // 算法正确性检测
+    /** 算法正确性检测 */
     @Test
     void testAccuracy() {
         // 测例1: 题目中张三的例子
@@ -90,53 +90,59 @@ public class TaxCalTest {
         assertEquals(0, tc5.calTax(new BigDecimal("900")).compareTo(new BigDecimal("180")));
     }
 
+    /** 测试小于起征点的情况 */
     @Test
     void testBelowThreshold() {
         assertEquals(0, taxCal.calTax(new BigDecimal("4000")).compareTo(BigDecimal.ZERO));
     }
 
+    /** 测试仅命中第一级税率情况 */
     @Test
     void testFirstBracket() {
         // 8000-5000=3000, 3000*0.03-0=90
         assertEquals(0, taxCal.calTax(new BigDecimal("8000")).compareTo(new BigDecimal("90")));
     }
 
+    /** 测试中间税率情况 */
     @Test
     void testMiddleBracket() {
         // 20000-5000=15000, 15000*0.20-1410=1590
         assertEquals(0, taxCal.calTax(new BigDecimal("20000")).compareTo(new BigDecimal("1590")));
     }
 
+    /** 测试最高税率情况 */
     @Test
     void testTopBracket() {
         // 100000-5000=95000, 95000*0.45-15160=27590
         assertEquals(0, taxCal.calTax(new BigDecimal("100000")).compareTo(new BigDecimal("27590")));
     }
 
-    // 起征点校验
+    /** 负起征点校验 */
     @Test
     void testNegativeThreshold() {
         assertThrows(RuntimeException.class, () ->
                 taxCal.setThreshold(new BigDecimal("-1")));
     }
 
+    /** 0起征点检验 */
     @Test
     void testZeroThreshold() {
         assertDoesNotThrow(() -> taxCal.setThreshold(BigDecimal.ZERO));
     }
 
-    // 税级数校验
+    /** 0税级数检验 */
     @Test
     void testZeroNumLevel() {
         assertThrows(RuntimeException.class, () -> taxCal.setNumLevel(0));
     }
 
+    /** 负税级数检验 */
     @Test
     void testNegativeNumLevel() {
         assertThrows(RuntimeException.class, () -> taxCal.setNumLevel(-1));
     }
 
-    // 税表校验
+    /** 税表校验*/
     @Test
     void testTaxTableLengthMismatch() {
         taxCal.setNumLevel(3);
@@ -147,6 +153,7 @@ public class TaxCalTest {
                 }));
     }
 
+    /** 测试税率非逐级上升的情况*/
     @Test
     void testNonIncreasingRate() {
         // 税率不递增应当正常接受
@@ -160,20 +167,21 @@ public class TaxCalTest {
         }));
     }
 
-    // 薪资校验
+    /** 薪资校验 */
     @Test
     void testZeroSalary() {
         assertThrows(RuntimeException.class, () ->
                 taxCal.calTax(BigDecimal.ZERO));
     }
 
+    /** 负薪资检验 */
     @Test
     void testNegativeSalary() {
         assertThrows(RuntimeException.class, () ->
                 taxCal.calTax(new BigDecimal("-100")));
     }
 
-    // 单级税表
+    /** 单级税表*/
     @Test
     void testSingleLevel() {
         TaxCal tc = new TaxCal();
@@ -186,15 +194,15 @@ public class TaxCalTest {
         assertEquals(0, tc.calTax(new BigDecimal("1000")).compareTo(new BigDecimal("100")));
     }
 
-    // 恰好在档位边界上
+    /** 恰好在档位边界上*/
     @Test
     void testOnBracketBoundary() {
-        // 5000+3000=8000，恰好在第一档上界
-        // 3000*0.03-0=90
-        assertEquals(0, taxCal.calTax(new BigDecimal("8000")).compareTo(new BigDecimal("90")));
+        // 5000+12000=17000，恰好在第二档上界
+        // 12000*0.10-210=990
+        assertEquals(0, taxCal.calTax(new BigDecimal("17000")).compareTo(new BigDecimal("990")));
     }
 
-    // 税率不递增时计算是否正确
+    /** 税率不递增时计算是否正确*/
     @Test
     void testNonIncreasingRateCalTax() {
         TaxCal tc = new TaxCal();

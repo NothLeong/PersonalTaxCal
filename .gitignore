@@ -4,6 +4,9 @@ target/
 !**/src/test/**/target/
 .kotlin
 
+out
+readme.txt
+
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml

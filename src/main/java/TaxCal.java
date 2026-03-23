@@ -9,8 +9,13 @@ import java.math.BigDecimal;
  */
 // TODO: 添加写入/加载配置文件逻辑，实现配置持久化
 public class TaxCal {
+    /** 个人所得税起征点 */
     private BigDecimal threshold;
+
+    /** 纳税分级总数 */
     private int numLevel;
+
+    /** 税表，元素结构为[上界, 税率, 速算扣除数] */
     private BigDecimal[][] taxTable;
 
     /**
@@ -159,7 +164,7 @@ public class TaxCal {
     }
 
     /**
-     *
+     * 使用速算扣除数算法计算个人所得税
      * @param salary 原始薪水
      * @return 应纳个人所得税
      */

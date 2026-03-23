@@ -133,7 +133,7 @@ public class Main {
     }
 
     /**
-     * 循环接收用户输入的薪资并计算应纳税款
+     * 循环接收用户输入的薪资并计算应纳税款，同时可接收用户输入的其他指令并处理
      * @param taxCal 配置好的税务计算器类TaxCal实例
      * @param scanner main中创建的Scanner实例
      */
