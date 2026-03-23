@@ -1,16 +1,35 @@
 import java.math.BigDecimal;
 
-/** 个人所得税计算器类，通过配置文件初始化起征点、税级、税表等参数
- * 各级税收范围和税率由税表存储
+/** 个人所得税计算器类
+ * <br>
+ * 各级税收范围和税率由税表存储。
  * 税表结构:以[该级对应应纳税所得额上界, 税率, 速算扣除数]为元素的数组
  * @author NothLeong
- * @version 1.0
+ * @version 1.1
  */
 // TODO: 添加写入/加载配置文件逻辑，实现配置持久化
 public class TaxCal {
     private BigDecimal threshold;
     private int numLevel;
     private BigDecimal[][] taxTable;
+
+    /**
+     * 构造一个未配置的TaxCal实例，需通过
+     * {@link #setThreshold(BigDecimal)}、{@link #setNumLevel}、{@link #setTaxTable}完成配置才可使用。
+     */
+    public TaxCal() {}
+
+    /**
+     * 构造一个已配置的TaxCal实例
+     * @param threshold 起征点
+     * @param numLevel 税级数
+     * @param taxTable 以[上界, 税率]为元素的税表数组
+     */
+    public TaxCal(BigDecimal threshold, int numLevel, BigDecimal[][] taxTable) {
+        setThreshold(threshold);
+        setNumLevel(numLevel);
+        setTaxTable(taxTable);
+    }
 
     /**
      *
@@ -36,8 +55,7 @@ public class TaxCal {
 
     /**
      *
-     * @param taxTable 结构为以[该级应纳税所得额上界，该级税率]为元素的数组
-     *                  类内部存储taxTable时会补全速算扣除数，变为[上界, 税率, 速算扣除数]
+     * @param taxTable 结构为以[该级应纳税所得额上界，该级税率]为元素的数组。处理时会补全速算扣除数。
      */
     public void setTaxTable(BigDecimal[][] taxTable) {
         if (taxTable.length != this.numLevel) {
@@ -131,6 +149,13 @@ public class TaxCal {
             copy[i] = taxTable[i].clone();
         }
         return copy;
+    }
+
+    /**
+     * @return 当前计算器是否已完成配置
+     */
+    public boolean isConfigured() {
+        return numLevel != 0 && threshold != null && taxTable != null;
     }
 
     /**
